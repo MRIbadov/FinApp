@@ -1,0 +1,7 @@
+transaction_id,account_id,transaction_date,type,amount,currency,counterparty,description
+TXN001,ACC001,2026-05-20,inflow,30000,GBP,Client A,Customer payment
+TXN002,ACC001,2026-05-20,outflow,5000,GBP,Supplier B,Invoice payment
+TXN003,ACC002,2026-05-20,outflow,20000,USD,Vendor C,Operational payment
+TXN004,ACC003,2026-05-20,inflow,15000,EUR,Client D,Customer payment
+TXN005,ACC004,2026-05-20,outflow,3000,PLN,Supplier E,Office expense
+TXN006,ACC004,2026-05-20,outflow,1000,PLN,Supplier F,Service fee

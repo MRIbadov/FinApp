@@ -1,0 +1,5 @@
+transaction_id,account_id,transaction_date,type,amount,currency,counterparty,description
+TXN001,ACC001,2026-05-20,inflow,30000,GBP,Client A,Customer payment
+TXN001,ACC001,2026-05-20,outflow,5000,GBP,Supplier B,Duplicate ID example
+TXN999,ACC999,2026-05-20,outflow,1000,EUR,Unknown Vendor,Unknown account example
+TXN100,ACC002,2026-05-20,outflow,-250,USD,Vendor C,Invalid negative amount

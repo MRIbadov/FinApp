@@ -1,0 +1,52 @@
+services:
+  mysql:
+    image: mysql:8.0
+    # Local development credentials. Replace these with secrets in shared environments.
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: treasury_db
+      MYSQL_USER: treasury_user
+      MYSQL_PASSWORD: treasury_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      # The API waits for this before starting, which avoids noisy first-run DB errors.
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "treasury_user", "-ptreasury_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  backend:
+    build: ./backend
+    # Values here are intentionally explicit so a new developer can see the app contract.
+    environment:
+      API_KEY: dev-secret-key
+      ALLOWED_ORIGINS: http://localhost:5173
+      MAX_UPLOAD_ROWS: 5000
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_USER: treasury_user
+      MYSQL_PASSWORD: treasury_password
+      MYSQL_DATABASE: treasury_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    image: node:20
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    # npm install runs inside the container so the host machine does not need Node installed.
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
