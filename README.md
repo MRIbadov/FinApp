@@ -1,4 +1,4 @@
-# Treasury Cash Position & Reconciliation Platform
+# Reconciliation Platform
 
 This version uses MySQL instead of in-memory storage.
 
