@@ -1,17 +1,28 @@
-# Small, predictable Python image for the FastAPI service.
+# Build the React frontend first.
+FROM node:20 AS frontend-build
+
+WORKDIR /app/frontend
+
+COPY frontend/package*.json ./
+RUN npm ci
+
+COPY frontend/ ./
+RUN npm run build
+
+
+# Run the FastAPI backend and serve the built frontend from the same service.
 FROM python:3.12-slim
 
 WORKDIR /app
 
-# Keep Python container logs readable and avoid writing cache files into the image.
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Install dependencies first so Docker can reuse this layer when app code changes.
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY backend/ ./
+COPY --from=frontend-build /app/frontend/dist ./static
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)"
