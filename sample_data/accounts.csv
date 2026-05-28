@@ -3,3 +3,5 @@ ACC001,JPMorgan,Main Operating Account,UK,GBP,UK Entity
 ACC002,JPMorgan,US Treasury Account,US,USD,US Entity
 ACC003,HSBC,European Cash Account,Germany,EUR,EU Entity
 ACC004,Citi,Poland Operating Account,Poland,PLN,PL Entity
+ACC004,BANK,Poland Operating Account,Poland,PLN,PL Entity
+
