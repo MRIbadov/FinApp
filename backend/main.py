@@ -1,11 +1,13 @@
 from fastapi import FastAPI, UploadFile, File, Depends, Header, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pandas.errors import EmptyDataError, ParserError
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 import pandas as pd
 from io import StringIO
+from pathlib import Path
 import time
 from typing import Dict, List
 
@@ -130,7 +132,7 @@ def add_audit_log(db: Session, action: str, entity_type: str, details: str):
     db.commit()
 
 
-@app.get("/")
+@app.get("/health")
 def health_check():
     return {"status": "running", "message": "FinApp API with MySQL"}
 
@@ -519,3 +521,9 @@ def get_audit_logs(db: Session = Depends(get_db)):
         }
         for row in db.query(AuditLog).order_by(AuditLog.id.desc()).all()
     ]
+
+
+static_dir = Path(__file__).resolve().parent / "static"
+
+if static_dir.exists():
+    app.mount("/", StaticFiles(directory=static_dir, html=True), name="frontend")

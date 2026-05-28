@@ -1,4 +1,6 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const localBackendUrl = "http://localhost:8000";
+const isViteDevServer = window.location.hostname === "localhost" && window.location.port === "5173";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (isViteDevServer ? localBackendUrl : "");
 const API_KEY = import.meta.env.VITE_API_KEY || "dev-secret-key";
 
 function securityHeaders() {
